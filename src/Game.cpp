@@ -29,7 +29,7 @@ void Game::update()
 	{
 		CloseWindow();
 	}
-	if (IsKeyPressed(KEY_SPACE)|| IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+	if (IsKeyPressed(KEY_SPACE) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 	{
 		TraceLog(LOG_INFO, "Pressed!\n");
 
@@ -38,8 +38,8 @@ void Game::update()
 		Vector2 bulletSize = { Bullet::WIDTH,Bullet::HEIGHT };
 
 		Vector2 spawnPosition = {
-	playerPos.x + (playerSize.x - bulletSize.x) / 2.0f,
-	playerPos.y - bulletSize.y
+			playerPos.x + (playerSize.x - bulletSize.x) / 2.0f,
+			playerPos.y - bulletSize.y
 		};
 
 		if (bullets.size() < MAX_BULLETS)

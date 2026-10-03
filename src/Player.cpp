@@ -1,5 +1,6 @@
 #include "headers/Player.h"
 #include <raymath.h>
+#include <algorithm>
 
 Player::Player() = default;
 
@@ -9,7 +10,7 @@ Player::~Player()
 		UnloadTexture(playerTexture);
 }
 
-void Player::loadTexture(Vector2 position)
+void Player::initPlayer(Vector2 position)
 {
 	this->position = position;
 
@@ -23,18 +24,8 @@ void Player::loadTexture(Vector2 position)
 		playerTexture.height * scale
 	};
 
-	// Hitbox is 70% of the sprite
-	hitboxSize = {
-		size.x * hitboxScale,
-		size.y * hitboxScale
-	};
-
-	hitbox = {
-		position.x + (size.x - hitboxSize.x) / 2.0f,
-		position.y + (size.y - hitboxSize.y) / 2.0f,
-		hitboxSize.x,
-		hitboxSize.y
-	};
+	hitbox.setSize(size, hitboxScale);
+	hitbox.setPosition(position, size);
 }
 
 void Player::update(float dt)
@@ -58,36 +49,31 @@ void Player::update(float dt)
 
 	velocity = Vector2Scale(velocity, speed);
 
-	// Move player
 	position = Vector2Add(
 		position,
 		Vector2Scale(velocity, dt)
 	);
 
-	// Hitbox offset inside sprite
-	float offsetX = (size.x - hitbox.width) / 2.0f;
-	float offsetY = (size.y - hitbox.height) / 2.0f;
+	hitbox.setPosition(position, size);
+	
+	// Get current hitbox
+	Rectangle rect = hitbox.getHitbox();
 
-	// Update hitbox BEFORE checking collision
-	hitbox.x = position.x + offsetX;
-	hitbox.y = position.y + offsetY;
+	// Keep player inside screen
+	if (rect.x < 0)
+		position.x -= rect.x;
 
-	// Keep hitbox inside screen
-	if (hitbox.x < 0)
-		position.x -= hitbox.x;
+	if (rect.x + rect.width > GetScreenWidth())
+		position.x -= (rect.x + rect.width) - GetScreenWidth();
 
-	if (hitbox.x + hitbox.width > GetScreenWidth())
-		position.x -= (hitbox.x + hitbox.width) - GetScreenWidth();
+	if (rect.y < 0)
+		position.y -= rect.y;
 
-	if (hitbox.y < 0)
-		position.y -= hitbox.y;
+	if (rect.y + rect.height > GetScreenHeight())
+		position.y -= (rect.y + rect.height) - GetScreenHeight();
 
-	if (hitbox.y + hitbox.height > GetScreenHeight())
-		position.y -= (hitbox.y + hitbox.height) - GetScreenHeight();
-
-	// Update hitbox one final time after correction
-	hitbox.x = position.x + offsetX;
-	hitbox.y = position.y + offsetY;
+	// Update hitbox again after correcting position
+	hitbox.setPosition(position, size);
 }
 
 void Player::draw() const
@@ -117,5 +103,15 @@ void Player::draw() const
 	);
 
 	// Debug hitbox
-	DrawRectangleLinesEx(hitbox, 2.0f, RED);
+	hitbox.drawHitbox();
+}
+
+void Player::takeDamage(int damage)
+{
+	health = std::clamp(health-damage,0,100);
+}
+
+void Player::heal(int amount)
+{
+	health = std::clamp(health + amount, 0, 100);
 }

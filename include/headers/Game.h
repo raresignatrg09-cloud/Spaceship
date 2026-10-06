@@ -43,4 +43,8 @@ private:
 	float asteroidSpawnInterval = 2.0f; // Spawn an asteroid every 2 seconds
 
 	Texture2D asteroidTexture{};
+	Texture2D backgroundTexture{};
+	Vector2 backgroundSize{};
+
+	bool gameOver = false;
 };

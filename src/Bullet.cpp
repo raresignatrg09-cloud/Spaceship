@@ -25,5 +25,8 @@ void Bullet::update()
 void Bullet::draw() const
 {
 	DrawRectangleV(position, {WIDTH,HEIGHT}, YELLOW);
+
+#ifdef _DEBUG
 	hitbox.drawHitbox();
+#endif
 }

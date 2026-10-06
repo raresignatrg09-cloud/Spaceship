@@ -22,6 +22,8 @@ public:
 
 	Rectangle getHitbox() const { return hitbox.getHitbox(); }
 
+    void reset(Vector2 position);
+
 private:
     Texture2D playerTexture{};
 
@@ -34,7 +36,7 @@ private:
     float speed = 350.0f;
     Vector2 velocity{};
 
-	int health = 100.0f;
+	int health = 10.;
 
     Hitbox hitbox{};
 };

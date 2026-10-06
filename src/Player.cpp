@@ -103,7 +103,9 @@ void Player::draw() const
 	);
 
 	// Debug hitbox
+#ifdef _DEBUG
 	hitbox.drawHitbox();
+#endif
 }
 
 void Player::takeDamage(int damage)
@@ -114,4 +116,10 @@ void Player::takeDamage(int damage)
 void Player::heal(int amount)
 {
 	health = std::clamp(health + amount, 0, 100);
+}
+
+void Player::reset(Vector2 position)
+{
+	initPlayer(position);
+	heal(100);
 }

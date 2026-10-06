@@ -16,7 +16,7 @@ public:
 	static constexpr float getRadius() { return 50.0f; } // Radius of the asteroid
 
 	Rectangle getHitbox() const { return hitbox.getHitbox(); }
-
+		
 private:
 	Vector2 position{};
 	Vector2 velocity{};

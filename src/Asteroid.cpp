@@ -51,5 +51,7 @@ void Asteroid::draw() const
 		WHITE
 	);
 
+#ifdef _DEBUG
 	hitbox.drawHitbox();
+#endif
 }
